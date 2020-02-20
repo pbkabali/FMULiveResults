@@ -31,10 +31,24 @@ export const getTableData = data => {
   return tableData;
 };
 
+export const getUrlData = data => {
+  let urlRow1 = Object.values(data[0]);
+  let urlRow2 = Object.values(data[1]);
+  let urlArray = [];
+  for (let i = 1; i < 8; i += 1) {
+    urlArray.push(urlRow1[i]);
+  }
+  for (let i = 2; i < 8; i += 1) {
+    urlArray.push(urlRow2[i]);
+  }
+  return urlArray;
+};
+
 const dataBreakDown = data => [
   getLeftPane(data),
   getHeightArray(data),
-  getTableData(data)
+  getTableData(data),
+  getUrlData(data)
 ];
 
 export default dataBreakDown;

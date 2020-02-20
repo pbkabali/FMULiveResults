@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   StyleSheet,
@@ -6,12 +6,12 @@ import {
   View,
   Button,
   ActivityIndicator,
-  Image
+  TouchableOpacity
 } from "react-native";
 
 import ResultsTable from "./components/resultsTable";
-import { RESULTS_URL } from "./constants";
-
+import { INITIAL_URL, HEADER_COLOR } from "./constants";
+import SponsorImage from "./components/sponsorImage";
 import dataBreakDown from "./helpers";
 import results from "./data";
 
@@ -21,17 +21,42 @@ export default function App() {
   const [tableData, setTableData] = useState(null);
   const [hieghtArray, setHieghtArray] = useState(null);
   const [showSpinner, setShowSpinner] = useState(false);
+  const [urlArray, setUrlArray] = useState([]);
 
-  const fetchResults = () => {
+  const responseToState = res => {
+    let [left, height, data, urls] = dataBreakDown(res.data);
+    setLeftPane(left);
+    setTableData(data);
+    setHieghtArray(height);
+    setUrlArray(urls);
+  };
+
+  useEffect(() => {
     setShowSpinner(true);
     axios
-      .get(RESULTS_URL, { headers: { "Content-Type": "application/json" } })
+      .get(INITIAL_URL, { headers: { "Content-Type": "application/json" } })
       .then(res => {
-        let [left, height, data] = dataBreakDown(res.data);
-        setLeftPane(left);
-        setTableData(data);
-        setHieghtArray(height);
+        responseToState(res);
+        setShowSpinner(false);
+      })
+      .catch(error => {
+        setShowSpinner(false);
+      });
 
+    // let [left, height, data, urls] = dataBreakDown(results);
+    // setLeftPane(left);
+    // setTableData(data);
+    // setHieghtArray(height);
+    // setUrlArray(urls);
+    // setShowSpinner(false);
+  }, []);
+
+  const FetchResults = () => {
+    setShowSpinner(true);
+    axios
+      .get(INITIAL_URL, { headers: { "Content-Type": "application/json" } })
+      .then(res => {
+        responseToState(res);
         setShowResults(true);
         setShowSpinner(false);
       })
@@ -55,21 +80,45 @@ export default function App() {
     <View style={styles.container}>
       {!showResults && !showSpinner && (
         <View>
-          <Image
-            style={styles.sponsorImage}
-            source={{
-              uri:
-                "https://res.cloudinary.com/poloslive/image/upload/v1582117787/sample.jpg"
-            }}
-          />
-          <Button title="Open Current Results" onPress={fetchResults} />
+          <TouchableOpacity
+            onPress={FetchResults}
+            style={{ alignItems: "center" }}
+          >
+            <SponsorImage source={urlArray[0]} length="350" high="200" />
+            <Button title="Open Current Results" onPress={FetchResults} />
+          </TouchableOpacity>
+          <View style={styles.developerView}>
+            <Text style={{ marginTop: 15 }}>
+              Live Results brought to you by:{" "}
+            </Text>
+          </View>
+          <View style={styles.sponsorLogos}>
+            <SponsorImage source={urlArray[1]} />
+            <SponsorImage source={urlArray[2]} />
+            <SponsorImage source={urlArray[3]} />
+            <SponsorImage source={urlArray[4]} />
+            <SponsorImage source={urlArray[5]} />
+            <SponsorImage source={urlArray[6]} />
+            <SponsorImage source={urlArray[7]} />
+            <SponsorImage source={urlArray[8]} />
+            <SponsorImage source={urlArray[9]} />
+            <SponsorImage source={urlArray[10]} />
+            <SponsorImage source={urlArray[11]} />
+            <SponsorImage source={urlArray[12]} />
+          </View>
+          <View style={styles.developerView}>
+            <Text>Powered by: </Text>
+            <Text style={{ color: HEADER_COLOR, fontWeight: "bold" }}>
+              SPIKE NETWORKS LTD
+            </Text>
+          </View>
         </View>
       )}
 
       {showSpinner && !showResults && (
         <View>
           <ActivityIndicator size="large" />
-          <Text>Fetching Current Results</Text>
+          <Text>Loading . . .</Text>
         </View>
       )}
 
@@ -86,7 +135,7 @@ export default function App() {
               title="Refresh"
               onPress={() => {
                 setShowResults(false);
-                fetchResults();
+                FetchResults();
               }}
             />
           </View>
@@ -107,8 +156,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
-  sponsorImage: {
-    width: 200,
-    height: 200
+  sponsorLogos: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    padding: 15
+  },
+  developerView: {
+    alignItems: "center",
+    justifyContent: "center"
   }
 });
