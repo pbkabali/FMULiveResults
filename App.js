@@ -6,29 +6,42 @@ import {
   View,
   Button,
   ActivityIndicator,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from "react-native";
 
 import ResultsTable from "./components/resultsTable";
-import { INITIAL_URL, HEADER_COLOR } from "./constants";
+import {
+  INITIAL_URL,
+  HEADER_COLOR,
+  TEXT_1_COLOR,
+  SCREEN_WIDTH,
+  BUTTON_1_COLOR
+} from "./constants";
 import SponsorImage from "./components/sponsorImage";
 import dataBreakDown from "./helpers";
 import results from "./data";
 
 export default function App() {
   const [showResults, setShowResults] = useState(false);
+  const [positionArray, setPositionArray] = useState(null);
   const [leftPane, setLeftPane] = useState(null);
+  const [totalTimeArray, setTotalTimeArray] = useState(null);
   const [tableData, setTableData] = useState(null);
   const [hieghtArray, setHieghtArray] = useState(null);
   const [showSpinner, setShowSpinner] = useState(false);
   const [urlArray, setUrlArray] = useState([]);
 
   const responseToState = res => {
-    let [left, height, data, urls] = dataBreakDown(res.data);
+    let [left, height, data, urls, position, totalTime] = dataBreakDown(
+      res.data
+    );
     setLeftPane(left);
     setTableData(data);
     setHieghtArray(height);
     setUrlArray(urls);
+    setPositionArray(position);
+    setTotalTimeArray(totalTime);
   };
 
   useEffect(() => {
@@ -80,45 +93,89 @@ export default function App() {
     <View style={styles.container}>
       {!showResults && !showSpinner && (
         <View>
-          <TouchableOpacity
-            onPress={FetchResults}
-            style={{ alignItems: "center" }}
-          >
-            <SponsorImage source={urlArray[0]} length="350" high="200" />
-            <Button title="Open Current Results" onPress={FetchResults} />
-          </TouchableOpacity>
-          <View style={styles.developerView}>
-            <Text style={{ marginTop: 15 }}>
-              Live Results brought to you by:{" "}
-            </Text>
-          </View>
-          <View style={styles.sponsorLogos}>
-            <SponsorImage source={urlArray[1]} />
-            <SponsorImage source={urlArray[2]} />
-            <SponsorImage source={urlArray[3]} />
-            <SponsorImage source={urlArray[4]} />
-            <SponsorImage source={urlArray[5]} />
-            <SponsorImage source={urlArray[6]} />
-            <SponsorImage source={urlArray[7]} />
-            <SponsorImage source={urlArray[8]} />
-            <SponsorImage source={urlArray[9]} />
-            <SponsorImage source={urlArray[10]} />
-            <SponsorImage source={urlArray[11]} />
-            <SponsorImage source={urlArray[12]} />
-          </View>
-          <View style={styles.developerView}>
-            <Text>Powered by: </Text>
-            <Text style={{ color: HEADER_COLOR, fontWeight: "bold" }}>
-              SPIKE NETWORKS LTD
-            </Text>
-          </View>
+          <ScrollView>
+            <TouchableOpacity
+              onPress={FetchResults}
+              style={{ alignItems: "center", paddingTop: 40 }}
+            >
+              <SponsorImage
+                source={urlArray[0]}
+                length={SCREEN_WIDTH * 0.8}
+                high={SCREEN_WIDTH * 0.4}
+              />
+              <View style={styles.fetchButton}>
+                <Text
+                  style={{
+                    color: TEXT_1_COLOR,
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    margin: 10
+                  }}
+                >
+                  Open Current Results
+                </Text>
+              </View>
+            </TouchableOpacity>
+            <View style={styles.developerView}>
+              <Text
+                style={{
+                  color: TEXT_1_COLOR,
+                  marginTop: 15,
+                  fontWeight: "bold"
+                }}
+              >
+                Live Results proudly brought to you by:{" "}
+              </Text>
+            </View>
+            <View style={styles.sponsorLogos}>
+              <SponsorImage source={urlArray[1]} />
+              <SponsorImage source={urlArray[1]} />
+              <SponsorImage source={urlArray[1]} />
+              <SponsorImage source={urlArray[1]} />
+              <SponsorImage source={urlArray[1]} />
+              <SponsorImage source={urlArray[1]} />
+              <SponsorImage source={urlArray[1]} />
+              <SponsorImage source={urlArray[1]} />
+              <SponsorImage source={urlArray[1]} />
+            </View>
+            <View style={styles.developerView}>
+              <Text>Powered by: </Text>
+              <Text style={{ fontWeight: "bold" }}>SPIKE NETWORKS LTD</Text>
+            </View>
+          </ScrollView>
         </View>
       )}
 
       {showSpinner && !showResults && (
-        <View>
+        <View style={styles.developerView}>
+          <View style={styles.sponsorLogos}>
+            <SponsorImage source={urlArray[1]} />
+            <SponsorImage source={urlArray[1]} />
+            <SponsorImage source={urlArray[1]} />
+          </View>
           <ActivityIndicator size="large" />
-          <Text>Loading . . .</Text>
+          <Text
+            style={{
+              color: TEXT_1_COLOR,
+              fontSize: 20,
+              fontWeight: "bold",
+              margin: 10
+            }}
+          >
+            Loading . . .
+          </Text>
+          <View style={styles.sponsorLogos}>
+            <SponsorImage source={urlArray[1]} />
+            <SponsorImage source={urlArray[1]} />
+            <SponsorImage source={urlArray[1]} />
+            <SponsorImage source={urlArray[1]} />
+            <SponsorImage source={urlArray[1]} />
+            <SponsorImage source={urlArray[1]} />
+          </View>
+          <View style={styles.developerView}>
+            <Text>Powered by: </Text>
+            <Text style={{ fontWeight: "bold" }}>SPIKE NETWORKS LTD</Text>
+          </View>
         </View>
       )}
 
@@ -128,11 +185,14 @@ export default function App() {
             leftPane={leftPane}
             hieghtArray={hieghtArray}
             tableData={tableData}
+            positionArray={positionArray}
+            totalTimeArray={totalTimeArray}
           />
           <View style={styles.footer}>
-            <Button title="Back" onPress={backToMain} />
+            <Button title="  Back    " onPress={backToMain} />
             <Button
               title="Refresh"
+              color={BUTTON_1_COLOR}
               onPress={() => {
                 setShowResults(false);
                 FetchResults();
@@ -148,7 +208,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: HEADER_COLOR,
     alignItems: "center",
     justifyContent: "center"
   },
@@ -165,5 +225,10 @@ const styles = StyleSheet.create({
   developerView: {
     alignItems: "center",
     justifyContent: "center"
+  },
+  fetchButton: {
+    backgroundColor: BUTTON_1_COLOR,
+    borderRadius: 5,
+    marginTop: 5
   }
 });

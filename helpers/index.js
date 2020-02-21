@@ -2,7 +2,7 @@ export const getLeftPane = data => {
   let leftPane = [];
   for (let i = 6; i < data.length; i += 1) {
     let singleEntry = Object.values(data[i]);
-    leftPane.push(singleEntry.slice(0, 5));
+    leftPane.push(singleEntry.slice(1, 5));
   }
   return leftPane;
 };
@@ -26,7 +26,7 @@ export const getTableData = data => {
   let tableData = [];
   for (let i = 6; i < data.length; i += 1) {
     let singleEntry = Object.values(data[i]);
-    tableData.push(singleEntry.slice(7, singleEntry.length + 1));
+    tableData.push(singleEntry.slice(8, singleEntry.length + 1));
   }
   return tableData;
 };
@@ -44,11 +44,31 @@ export const getUrlData = data => {
   return urlArray;
 };
 
+export const getPositionArray = data => {
+  let positionArray = [];
+  for (let i = 6; i < data.length; i += 1) {
+    let singleEntry = Object.values(data[i]);
+    positionArray.push(singleEntry.slice(0, 1));
+  }
+  return positionArray;
+};
+
+export const getTotalTimeArray = data => {
+  let totalTimeArray = [];
+  for (let i = 6; i < data.length; i += 1) {
+    let singleEntry = Object.values(data[i]);
+    totalTimeArray.push(singleEntry.slice(7, 8));
+  }
+  return totalTimeArray;
+};
+
 const dataBreakDown = data => [
   getLeftPane(data),
   getHeightArray(data),
   getTableData(data),
-  getUrlData(data)
+  getUrlData(data),
+  getPositionArray(data),
+  getTotalTimeArray(data)
 ];
 
 export default dataBreakDown;

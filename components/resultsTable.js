@@ -13,17 +13,42 @@ import {
 import { HEADER_COLOR } from "../constants";
 
 const ResultsTable = props => {
-  const { leftPane, hieghtArray, tableData } = props;
+  const {
+    leftPane,
+    hieghtArray,
+    tableData,
+    positionArray,
+    totalTimeArray
+  } = props;
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.tableView}>
           <Table borderStyle={{ borderWidth: 1, borderColor: "#C1C0B9" }}>
+            {positionArray.map((rowData, index) => (
+              <Row
+                key={index}
+                data={rowData}
+                widthArr={hieghtArray.slice(0, 1)}
+                heightArr={hieghtArray}
+                textStyle={[
+                  styles.text,
+                  styles.headerTextStyle,
+                  index > 0 && { fontSize: 15, color: HEADER_COLOR }
+                ]}
+                style={[
+                  styles.leftPane,
+                  index == 0 && { backgroundColor: HEADER_COLOR }
+                ]}
+              />
+            ))}
+          </Table>
+          <Table borderStyle={{ borderWidth: 1, borderColor: "#C1C0B9" }}>
             {leftPane.map((rowData, index) => (
               <Row
                 key={index}
                 data={rowData}
-                widthArr={hieghtArray.slice(0, 5)}
+                widthArr={hieghtArray.slice(1, 5)}
                 heightArr={hieghtArray}
                 textStyle={[styles.text, index == 0 && styles.headerTextStyle]}
                 style={[
@@ -40,11 +65,36 @@ const ResultsTable = props => {
                 borderColor: "#C1C0B9"
               }}
             >
+              {totalTimeArray.map((rowData, index) => (
+                <Row
+                  key={index}
+                  data={rowData}
+                  widthArr={hieghtArray.slice(7, 8)}
+                  heightArr={hieghtArray}
+                  style={[
+                    styles.col,
+                    index % 2 && { backgroundColor: "#F7F6E7" },
+                    index == 0 && { backgroundColor: HEADER_COLOR }
+                  ]}
+                  textStyle={[
+                    styles.text,
+                    styles.headerTextStyle,
+                    index > 0 && { fontSize: 12, color: HEADER_COLOR }
+                  ]}
+                />
+              ))}
+            </Table>
+            <Table
+              borderStyle={{
+                borderWidth: 1,
+                borderColor: "#C1C0B9"
+              }}
+            >
               {tableData.map((rowData, index) => (
                 <Row
                   key={index}
                   data={rowData}
-                  widthArr={hieghtArray.slice(7, hieghtArray.length + 1)}
+                  widthArr={hieghtArray.slice(8, hieghtArray.length + 1)}
                   heightArr={hieghtArray}
                   style={[
                     styles.col,
