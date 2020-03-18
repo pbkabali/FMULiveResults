@@ -31,15 +31,17 @@ export default function App() {
   const [hieghtArray, setHieghtArray] = useState(null);
   const [showSpinner, setShowSpinner] = useState(false);
   const [urlArray, setUrlArray] = useState([]);
+  const [linkArray, setLinkArray] = useState([]);
 
   const responseToState = res => {
-    let [left, height, data, urls, position, totalTime] = dataBreakDown(
+    let [left, height, data, urls, links, position, totalTime] = dataBreakDown(
       res.data
     );
     setLeftPane(left);
     setTableData(data);
     setHieghtArray(height);
     setUrlArray(urls);
+    setLinkArray(links);
     setPositionArray(position);
     setTotalTimeArray(totalTime);
   };
@@ -128,15 +130,15 @@ export default function App() {
               </Text>
             </View>
             <View style={styles.sponsorLogos}>
-              <SponsorImage source={urlArray[1]} />
-              <SponsorImage source={urlArray[1]} />
-              <SponsorImage source={urlArray[1]} />
-              <SponsorImage source={urlArray[1]} />
-              <SponsorImage source={urlArray[1]} />
-              <SponsorImage source={urlArray[1]} />
-              <SponsorImage source={urlArray[1]} />
-              <SponsorImage source={urlArray[1]} />
-              <SponsorImage source={urlArray[1]} />
+              <SponsorImage source={urlArray[1]} href={linkArray[1]} />
+              <SponsorImage source={urlArray[2]} href={linkArray[2]} />
+              <SponsorImage source={urlArray[3]} href={linkArray[3]} />
+              <SponsorImage source={urlArray[4]} href={linkArray[4]} />
+              <SponsorImage source={urlArray[5]} href={linkArray[5]} />
+              <SponsorImage source={urlArray[6]} href={linkArray[6]} />
+              <SponsorImage source={urlArray[7]} href={linkArray[7]} />
+              <SponsorImage source={urlArray[8]} href={linkArray[8]} />
+              <SponsorImage source={urlArray[9]} href={linkArray[9]} />
             </View>
             <View style={styles.developerView}>
               <Text>Powered by: </Text>
@@ -150,8 +152,8 @@ export default function App() {
         <View style={styles.developerView}>
           <View style={styles.sponsorLogos}>
             <SponsorImage source={urlArray[1]} />
-            <SponsorImage source={urlArray[1]} />
-            <SponsorImage source={urlArray[1]} />
+            <SponsorImage source={urlArray[2]} />
+            <SponsorImage source={urlArray[3]} />
           </View>
           <ActivityIndicator size="large" />
           <Text
@@ -165,12 +167,12 @@ export default function App() {
             Loading . . .
           </Text>
           <View style={styles.sponsorLogos}>
-            <SponsorImage source={urlArray[1]} />
-            <SponsorImage source={urlArray[1]} />
-            <SponsorImage source={urlArray[1]} />
-            <SponsorImage source={urlArray[1]} />
-            <SponsorImage source={urlArray[1]} />
-            <SponsorImage source={urlArray[1]} />
+            <SponsorImage source={urlArray[4]} />
+            <SponsorImage source={urlArray[5]} />
+            <SponsorImage source={urlArray[6]} />
+            <SponsorImage source={urlArray[7]} />
+            <SponsorImage source={urlArray[8]} />
+            <SponsorImage source={urlArray[9]} />
           </View>
           <View style={styles.developerView}>
             <Text>Powered by: </Text>

@@ -10,7 +10,7 @@ import {
   Cell
 } from "react-native-table-component";
 
-import { HEADER_COLOR } from "../constants";
+import { HEADER_COLOR, POSITION_COLOR } from "../constants";
 
 const ResultsTable = props => {
   const {
@@ -34,7 +34,7 @@ const ResultsTable = props => {
                 textStyle={[
                   styles.text,
                   styles.headerTextStyle,
-                  index > 0 && { fontSize: 15, color: HEADER_COLOR }
+                  index > 0 && { fontSize: 15, color: POSITION_COLOR }
                 ]}
                 style={[
                   styles.leftPane,
@@ -79,7 +79,7 @@ const ResultsTable = props => {
                   textStyle={[
                     styles.text,
                     styles.headerTextStyle,
-                    index > 0 && { fontSize: 12, color: HEADER_COLOR }
+                    index > 0 && { fontSize: 12, color: POSITION_COLOR }
                   ]}
                 />
               ))}

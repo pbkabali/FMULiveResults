@@ -1,35 +1,42 @@
 import React from "react";
 
-import { StyleSheet, Image, View } from "react-native";
+import { StyleSheet, Image, View, TouchableOpacity } from "react-native";
+import { Linking } from "expo";
 
 import { SCREEN_WIDTH, TEXT_1_COLOR } from "../constants";
 
 export default function SponsorImage(props) {
-  const { source, length, high } = props;
+  const { source, length, high, href } = props;
+
+  handlePress = () => {
+    href && Linking.openURL(href);
+  };
   return (
-    <View
-      style={[
-        styles.imageView,
-        length && { width: parseInt(length) * 1.04 },
-        high && { height: parseInt(high) * 1.04 }
-      ]}
-    >
-      <Image
+    <TouchableOpacity onPress={handlePress}>
+      <View
         style={[
-          styles.sponsorImage,
-          length && { width: parseInt(length) },
-          high && { height: parseInt(high) },
-          { resizeMode: "contain" }
+          styles.imageView,
+          length && { width: parseInt(length) * 1.04 },
+          high && { height: parseInt(high) * 1.04 }
         ]}
-        source={
-          source
-            ? {
-                uri: source
-              }
-            : require("../assets/icon.png")
-        }
-      />
-    </View>
+      >
+        <Image
+          style={[
+            styles.sponsorImage,
+            length && { width: parseInt(length) },
+            high && { height: parseInt(high) },
+            { resizeMode: "contain" }
+          ]}
+          source={
+            source
+              ? {
+                  uri: source
+                }
+              : require("../assets/UMCLogo.png")
+          }
+        />
+      </View>
+    </TouchableOpacity>
   );
 }
 

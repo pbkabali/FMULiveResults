@@ -44,6 +44,19 @@ export const getUrlData = data => {
   return urlArray;
 };
 
+export const getLinkData = data => {
+  let linkRow1 = Object.values(data[2]);
+  let linkRow2 = Object.values(data[3]);
+  let linkArray = [];
+  for (let i = 1; i < 8; i += 1) {
+    linkArray.push(linkRow1[i]);
+  }
+  for (let i = 2; i < 8; i += 1) {
+    linkArray.push(linkRow2[i]);
+  }
+  return linkArray;
+};
+
 export const getPositionArray = data => {
   let positionArray = [];
   for (let i = 6; i < data.length; i += 1) {
@@ -67,6 +80,7 @@ const dataBreakDown = data => [
   getHeightArray(data),
   getTableData(data),
   getUrlData(data),
+  getLinkData(data),
   getPositionArray(data),
   getTotalTimeArray(data)
 ];
