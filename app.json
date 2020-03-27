@@ -4,27 +4,30 @@
     "slug": "FMULiveResults",
     "privacy": "public",
     "sdkVersion": "36.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/UMCLogo.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/launchScreen.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
-    }
+      "bundleIdentifier": "com.spikenetworks.fmuliveresults",
+      "supportsTablet": true,
+      "buildNumber": "1"
+    },
+    "android": {
+      "package": "com.spikenetworks.fmuliveresults",
+      "permissions": [],
+      "versionCode": 1
+    },
+    "facebookAppId": "1411366419060681_1411374785726511",
+    "facebookDisplayName": "polos"
   }
 }

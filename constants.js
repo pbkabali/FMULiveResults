@@ -17,3 +17,5 @@ export const TEXT_1_COLOR = "#ffff";
 export const BUTTON_1_COLOR = "#19542B";
 
 export const POSITION_COLOR = "indigo";
+
+// banner ad placement ID: 1411366419060681_1411374785726511

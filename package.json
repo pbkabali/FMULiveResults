@@ -9,7 +9,10 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "exp": "^57.2.1",
     "expo": "~36.0.0",
+    "expo-ads-facebook": "~8.0.0",
+    "global": "^4.4.0",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
