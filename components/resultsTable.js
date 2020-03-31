@@ -50,7 +50,11 @@ const ResultsTable = props => {
                 data={rowData}
                 widthArr={hieghtArray.slice(1, 5)}
                 heightArr={hieghtArray}
-                textStyle={[styles.text, index == 0 && styles.headerTextStyle]}
+                textStyle={[
+                  styles.text,
+                  styles.headerTextStyle,
+                  { textAlign: "left", marginLeft: 2 }
+                ]}
                 style={[
                   styles.leftPane,
                   index == 0 && { backgroundColor: HEADER_COLOR }
@@ -116,7 +120,7 @@ const ResultsTable = props => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 5, paddingTop: 30, backgroundColor: "#fff" },
+  container: { flex: 1, padding: 5, backgroundColor: "#fff" },
   leftPane: { height: 40, width: "auto", backgroundColor: "#537791" },
   text: { textAlign: "center", fontSize: 10 },
   dataWrapper: { marginTop: -1 },

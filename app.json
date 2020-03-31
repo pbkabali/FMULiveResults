@@ -25,9 +25,10 @@
     "android": {
       "package": "com.spikenetworks.fmuliveresults",
       "permissions": [],
-      "versionCode": 1
-    },
-    "facebookAppId": "1411366419060681_1411374785726511",
-    "facebookDisplayName": "polos"
+      "versionCode": 1,
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-4655659437119690~2381359132"
+      }
+    }
   }
 }

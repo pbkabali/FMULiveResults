@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+
 import {
   StyleSheet,
   Text,
@@ -16,11 +17,17 @@ import {
   HEADER_COLOR,
   TEXT_1_COLOR,
   SCREEN_WIDTH,
-  BUTTON_1_COLOR
+  SCREEN_HEIGHT,
+  BUTTON_1_COLOR,
+  STATUS_BAR_HEIGHT
 } from "./constants";
 import SponsorImage from "./components/sponsorImage";
+import HomeScreenSponsors from "./components/homeScreenSponsors";
+import LoadingScreenSponsorsTop from "./components/loadingScreenSponsorsTop";
+import LoadingScreenSponsorsBottom from "./components/loadingScreenSponsorsBottom";
+import ResultsScreenSponsors from "./components/resultsScreenSponsors";
+import { BannerAd } from "./components/googleAds";
 import dataBreakDown from "./helpers";
-import results from "./data";
 
 export default function App() {
   const [showResults, setShowResults] = useState(false);
@@ -57,13 +64,6 @@ export default function App() {
       .catch(error => {
         setShowSpinner(false);
       });
-
-    // let [left, height, data, urls] = dataBreakDown(results);
-    // setLeftPane(left);
-    // setTableData(data);
-    // setHieghtArray(height);
-    // setUrlArray(urls);
-    // setShowSpinner(false);
   }, []);
 
   const FetchResults = () => {
@@ -77,16 +77,7 @@ export default function App() {
       })
       .catch(error => {
         setShowSpinner(false);
-        // console.log(error);
       });
-
-    // let [left, height, data] = dataBreakDown(results);
-    // setLeftPane(left);
-    // setTableData(data);
-    // setHieghtArray(height);
-
-    // setShowResults(true);
-    // setShowSpinner(false);
   };
 
   const backToMain = () => setShowResults(!showResults);
@@ -98,12 +89,12 @@ export default function App() {
           <ScrollView>
             <TouchableOpacity
               onPress={FetchResults}
-              style={{ alignItems: "center", paddingTop: 40 }}
+              style={{ alignItems: "center", paddingTop: STATUS_BAR_HEIGHT }}
             >
               <SponsorImage
                 source={urlArray[0]}
                 length={SCREEN_WIDTH * 0.8}
-                high={SCREEN_WIDTH * 0.4}
+                high={SCREEN_HEIGHT * 0.2}
               />
               <View style={styles.fetchButton}>
                 <Text
@@ -114,7 +105,7 @@ export default function App() {
                     margin: 10
                   }}
                 >
-                  Open Current Results
+                  See Current Standings
                 </Text>
               </View>
             </TouchableOpacity>
@@ -129,32 +120,19 @@ export default function App() {
                 Live Results proudly brought to you by:{" "}
               </Text>
             </View>
-            <View style={styles.sponsorLogos}>
-              <SponsorImage source={urlArray[1]} href={linkArray[1]} />
-              <SponsorImage source={urlArray[2]} href={linkArray[2]} />
-              <SponsorImage source={urlArray[3]} href={linkArray[3]} />
-              <SponsorImage source={urlArray[4]} href={linkArray[4]} />
-              <SponsorImage source={urlArray[5]} href={linkArray[5]} />
-              <SponsorImage source={urlArray[6]} href={linkArray[6]} />
-              <SponsorImage source={urlArray[7]} href={linkArray[7]} />
-              <SponsorImage source={urlArray[8]} href={linkArray[8]} />
-              <SponsorImage source={urlArray[9]} href={linkArray[9]} />
-            </View>
-            <View style={styles.developerView}>
-              <Text>Powered by: </Text>
-              <Text style={{ fontWeight: "bold" }}>SPIKE NETWORKS LTD</Text>
-            </View>
+            <HomeScreenSponsors urlArray={urlArray} linkArray={linkArray} />
           </ScrollView>
+          <View style={styles.developerView}>
+            <Text>Powered by: </Text>
+            <Text style={{ fontWeight: "bold" }}>SPIKE NETWORKS LTD</Text>
+          </View>
+          <BannerAd />
         </View>
       )}
 
       {showSpinner && !showResults && (
         <View style={styles.developerView}>
-          <View style={styles.sponsorLogos}>
-            <SponsorImage source={urlArray[1]} />
-            <SponsorImage source={urlArray[2]} />
-            <SponsorImage source={urlArray[3]} />
-          </View>
+          <LoadingScreenSponsorsTop urlArray={urlArray} />
           <ActivityIndicator size="large" />
           <Text
             style={{
@@ -166,32 +144,25 @@ export default function App() {
           >
             Loading . . .
           </Text>
-          <View style={styles.sponsorLogos}>
-            <SponsorImage source={urlArray[4]} />
-            <SponsorImage source={urlArray[5]} />
-            <SponsorImage source={urlArray[6]} />
-            <SponsorImage source={urlArray[7]} />
-            <SponsorImage source={urlArray[8]} />
-            <SponsorImage source={urlArray[9]} />
-          </View>
+          <LoadingScreenSponsorsBottom urlArray={urlArray} />
           <View style={styles.developerView}>
             <Text>Powered by: </Text>
             <Text style={{ fontWeight: "bold" }}>SPIKE NETWORKS LTD</Text>
+          </View>
+          <View style={{ marginTop: 10 }}>
+            <BannerAd />
           </View>
         </View>
       )}
 
       {showResults && (
         <View>
-          <ResultsTable
-            leftPane={leftPane}
-            hieghtArray={hieghtArray}
-            tableData={tableData}
-            positionArray={positionArray}
-            totalTimeArray={totalTimeArray}
-          />
           <View style={styles.footer}>
             <Button title="  Back    " onPress={backToMain} />
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ color: "#fff" }}>MBARARA RALLY 16/FEB/2020</Text>
+              <Text>Un-Official Standings</Text>
+            </View>
             <Button
               title="Refresh"
               color={BUTTON_1_COLOR}
@@ -201,6 +172,15 @@ export default function App() {
               }}
             />
           </View>
+          <ResultsTable
+            leftPane={leftPane}
+            hieghtArray={hieghtArray}
+            tableData={tableData}
+            positionArray={positionArray}
+            totalTimeArray={totalTimeArray}
+          />
+          <ResultsScreenSponsors urlArray={urlArray} linkArray={linkArray} />
+          <BannerAd />
         </View>
       )}
     </View>
@@ -216,13 +196,9 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: "row",
-    justifyContent: "space-between"
-  },
-  sponsorLogos: {
-    flexDirection: "row",
-    flexWrap: "wrap",
     justifyContent: "space-between",
-    padding: 15
+    height: 40,
+    marginTop: STATUS_BAR_HEIGHT
   },
   developerView: {
     alignItems: "center",

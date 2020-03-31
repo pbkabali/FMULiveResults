@@ -3,7 +3,7 @@ import React from "react";
 import { StyleSheet, Image, View, TouchableOpacity } from "react-native";
 import { Linking } from "expo";
 
-import { SCREEN_WIDTH, TEXT_1_COLOR } from "../constants";
+import { SCREEN_WIDTH, TEXT_1_COLOR, HEADER_COLOR } from "../constants";
 
 export default function SponsorImage(props) {
   const { source, length, high, href } = props;
