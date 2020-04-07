@@ -39,11 +39,19 @@ export default function App() {
   const [showSpinner, setShowSpinner] = useState(false);
   const [urlArray, setUrlArray] = useState([]);
   const [linkArray, setLinkArray] = useState([]);
+  const [rallyName, setRallyName] = useState(null);
 
   const responseToState = res => {
-    let [left, height, data, urls, links, position, totalTime] = dataBreakDown(
-      res.data
-    );
+    let [
+      left,
+      height,
+      data,
+      urls,
+      links,
+      position,
+      totalTime,
+      name
+    ] = dataBreakDown(res.data);
     setLeftPane(left);
     setTableData(data);
     setHieghtArray(height);
@@ -51,6 +59,7 @@ export default function App() {
     setLinkArray(links);
     setPositionArray(position);
     setTotalTimeArray(totalTime);
+    setRallyName(name);
   };
 
   useEffect(() => {
@@ -160,7 +169,7 @@ export default function App() {
           <View style={styles.footer}>
             <Button title="  Back    " onPress={backToMain} />
             <View style={{ alignItems: "center" }}>
-              <Text style={{ color: "#fff" }}>MBARARA RALLY 16/FEB/2020</Text>
+              <Text style={{ color: "#fff" }}>{rallyName}</Text>
               <Text>Un-Official Standings</Text>
             </View>
             <Button

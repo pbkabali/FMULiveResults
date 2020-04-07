@@ -75,6 +75,8 @@ export const getTotalTimeArray = data => {
   return totalTimeArray;
 };
 
+export const getRallyName = data => Object.values(data[2])[8];
+
 const dataBreakDown = data => [
   getLeftPane(data),
   getHeightArray(data),
@@ -82,7 +84,8 @@ const dataBreakDown = data => [
   getUrlData(data),
   getLinkData(data),
   getPositionArray(data),
-  getTotalTimeArray(data)
+  getTotalTimeArray(data),
+  getRallyName(data)
 ];
 
 export default dataBreakDown;

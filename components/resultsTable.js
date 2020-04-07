@@ -120,7 +120,7 @@ const ResultsTable = props => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 5, backgroundColor: "#fff" },
+  container: { flex: 1, paddingTop: 1, backgroundColor: "#fff" },
   leftPane: { height: 40, width: "auto", backgroundColor: "#537791" },
   text: { textAlign: "center", fontSize: 10 },
   dataWrapper: { marginTop: -1 },
