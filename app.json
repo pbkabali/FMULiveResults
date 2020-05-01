@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "FMULiveResults",
-    "slug": "FMULiveResults",
+    "name": "FMULive",
+    "slug": "FMULive",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/UMCLogo.png",
+    "icon": "./assets/appIcon.png",
     "splash": {
       "image": "./assets/launchScreen.png",
       "resizeMode": "contain",
@@ -18,16 +18,16 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "bundleIdentifier": "com.spikenetworks.fmuliveresults",
+      "bundleIdentifier": "com.spikenetworks.fmulive",
       "supportsTablet": true,
       "buildNumber": "1"
     },
     "android": {
-      "package": "com.spikenetworks.fmuliveresults",
+      "package": "com.spikenetworks.fmulive",
       "permissions": [],
       "versionCode": 1,
       "config": {
-        "googleMobileAdsAppId": "ca-app-pub-4655659437119690~2381359132"
+        "googleMobileAdsAppId": "ca-app-pub-3940256099942544~3347511713"
       }
     }
   }

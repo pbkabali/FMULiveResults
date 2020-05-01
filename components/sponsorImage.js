@@ -3,7 +3,7 @@ import React from "react";
 import { StyleSheet, Image, View, TouchableOpacity } from "react-native";
 import { Linking } from "expo";
 
-import { SCREEN_WIDTH, TEXT_1_COLOR, HEADER_COLOR } from "../constants";
+import { SCREEN_WIDTH } from "../constants";
 
 export default function SponsorImage(props) {
   const { source, length, high, href } = props;
@@ -17,7 +17,7 @@ export default function SponsorImage(props) {
         style={[
           styles.imageView,
           length && { width: parseInt(length) * 1.04 },
-          high && { height: parseInt(high) * 1.04 }
+          high && { height: parseInt(high) * 1.04 },
         ]}
       >
         <Image
@@ -25,14 +25,14 @@ export default function SponsorImage(props) {
             styles.sponsorImage,
             length && { width: parseInt(length) },
             high && { height: parseInt(high) },
-            { resizeMode: "contain" }
+            { resizeMode: "contain" },
           ]}
           source={
             source
               ? {
-                  uri: source
+                  uri: source,
                 }
-              : require("../assets/UMCLogo.png")
+              : require("../assets/appIcon.png")
           }
         />
       </View>
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   sponsorImage: {
     width: SCREEN_WIDTH * 0.23,
     height: SCREEN_WIDTH * 0.23,
-    borderRadius: 25
+    borderRadius: 25,
   },
   imageView: {
     width: SCREEN_WIDTH * 0.25,
@@ -53,6 +53,6 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: "black",
     alignItems: "center",
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 });

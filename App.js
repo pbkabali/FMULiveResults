@@ -8,7 +8,7 @@ import {
   Button,
   ActivityIndicator,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
 } from "react-native";
 
 import ResultsTable from "./components/resultsTable";
@@ -19,7 +19,7 @@ import {
   SCREEN_WIDTH,
   SCREEN_HEIGHT,
   BUTTON_1_COLOR,
-  STATUS_BAR_HEIGHT
+  STATUS_BAR_HEIGHT,
 } from "./constants";
 import SponsorImage from "./components/sponsorImage";
 import HomeScreenSponsors from "./components/homeScreenSponsors";
@@ -34,6 +34,9 @@ export default function App() {
   const [positionArray, setPositionArray] = useState(null);
   const [leftPane, setLeftPane] = useState(null);
   const [totalTimeArray, setTotalTimeArray] = useState(null);
+  const [penaltiesArray, setPenaltiesArray] = useState(null);
+  const [diffLeaderArray, setDiffLeaderArray] = useState(null);
+  const [diffPreviousArray, setDiffPreviousArray] = useState(null);
   const [tableData, setTableData] = useState(null);
   const [hieghtArray, setHieghtArray] = useState(null);
   const [showSpinner, setShowSpinner] = useState(false);
@@ -41,7 +44,7 @@ export default function App() {
   const [linkArray, setLinkArray] = useState([]);
   const [rallyName, setRallyName] = useState(null);
 
-  const responseToState = res => {
+  const responseToState = (res) => {
     let [
       left,
       height,
@@ -50,7 +53,10 @@ export default function App() {
       links,
       position,
       totalTime,
-      name
+      penalties,
+      diffLeader,
+      diffPrevoius,
+      name,
     ] = dataBreakDown(res.data);
     setLeftPane(left);
     setTableData(data);
@@ -59,6 +65,9 @@ export default function App() {
     setLinkArray(links);
     setPositionArray(position);
     setTotalTimeArray(totalTime);
+    setPenaltiesArray(penalties);
+    setDiffLeaderArray(diffLeader);
+    setDiffPreviousArray(diffPrevoius);
     setRallyName(name);
   };
 
@@ -66,11 +75,11 @@ export default function App() {
     setShowSpinner(true);
     axios
       .get(INITIAL_URL, { headers: { "Content-Type": "application/json" } })
-      .then(res => {
+      .then((res) => {
         responseToState(res);
         setShowSpinner(false);
       })
-      .catch(error => {
+      .catch((error) => {
         setShowSpinner(false);
       });
   }, []);
@@ -79,12 +88,12 @@ export default function App() {
     setShowSpinner(true);
     axios
       .get(INITIAL_URL, { headers: { "Content-Type": "application/json" } })
-      .then(res => {
+      .then((res) => {
         responseToState(res);
         setShowResults(true);
         setShowSpinner(false);
       })
-      .catch(error => {
+      .catch((error) => {
         setShowSpinner(false);
       });
   };
@@ -111,10 +120,10 @@ export default function App() {
                     color: TEXT_1_COLOR,
                     fontSize: 20,
                     fontWeight: "bold",
-                    margin: 10
+                    margin: 10,
                   }}
                 >
-                  See Current Standings
+                  Check Live Results
                 </Text>
               </View>
             </TouchableOpacity>
@@ -123,7 +132,7 @@ export default function App() {
                 style={{
                   color: TEXT_1_COLOR,
                   marginTop: 15,
-                  fontWeight: "bold"
+                  fontWeight: "bold",
                 }}
               >
                 Live Results proudly brought to you by:{" "}
@@ -148,7 +157,7 @@ export default function App() {
               color: TEXT_1_COLOR,
               fontSize: 20,
               fontWeight: "bold",
-              margin: 10
+              margin: 10,
             }}
           >
             Loading . . .
@@ -187,6 +196,9 @@ export default function App() {
             tableData={tableData}
             positionArray={positionArray}
             totalTimeArray={totalTimeArray}
+            penaltiesArray={penaltiesArray}
+            diffLeaderArray={diffLeaderArray}
+            diffPreviousArray={diffPreviousArray}
           />
           <ResultsScreenSponsors urlArray={urlArray} linkArray={linkArray} />
           <BannerAd />
@@ -201,21 +213,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: HEADER_COLOR,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
     height: 40,
-    marginTop: STATUS_BAR_HEIGHT
+    marginTop: STATUS_BAR_HEIGHT,
   },
   developerView: {
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   fetchButton: {
     backgroundColor: BUTTON_1_COLOR,
     borderRadius: 5,
-    marginTop: 5
-  }
+    marginTop: 5,
+  },
 });
