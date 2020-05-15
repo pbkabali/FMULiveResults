@@ -6,7 +6,10 @@ import { AdMobBanner } from "expo-ads-admob";
 
 import { GOOGLE_BANNER_ID } from "../constants";
 
-export function BannerAd() {
+export function BannerAd(props) {
+  const { onError } = props;
+
+  handleError = (error) => onError(error);
   return (
     <View style={{ alignItems: "center" }}>
       <AdMobBanner
@@ -14,7 +17,7 @@ export function BannerAd() {
         adUnitID={GOOGLE_BANNER_ID}
         setTestDeviceID="EMULATOR"
         servePersonalizedAds={false} // true or false
-        onDidFailToReceiveAdWithError={e => alert(e)}
+        onDidFailToReceiveAdWithError={handleError}
       />
     </View>
   );

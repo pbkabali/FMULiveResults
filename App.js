@@ -31,6 +31,8 @@ import dataBreakDown from "./helpers";
 
 export default function App() {
   const [showResults, setShowResults] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
   const [positionArray, setPositionArray] = useState(null);
   const [leftPane, setLeftPane] = useState(null);
   const [totalTimeArray, setTotalTimeArray] = useState(null);
@@ -39,7 +41,6 @@ export default function App() {
   const [diffPreviousArray, setDiffPreviousArray] = useState(null);
   const [tableData, setTableData] = useState(null);
   const [hieghtArray, setHieghtArray] = useState(null);
-  const [showSpinner, setShowSpinner] = useState(false);
   const [urlArray, setUrlArray] = useState([]);
   const [linkArray, setLinkArray] = useState([]);
   const [rallyName, setRallyName] = useState(null);
@@ -72,7 +73,6 @@ export default function App() {
   };
 
   useEffect(() => {
-    setShowSpinner(true);
     axios
       .get(INITIAL_URL, { headers: { "Content-Type": "application/json" } })
       .then((res) => {
@@ -80,34 +80,48 @@ export default function App() {
         setShowSpinner(false);
       })
       .catch((error) => {
+        setFetchError(error);
         setShowSpinner(false);
       });
   }, []);
 
   const FetchResults = () => {
+    setFetchError(null);
     setShowSpinner(true);
     axios
       .get(INITIAL_URL, { headers: { "Content-Type": "application/json" } })
       .then((res) => {
+        console.log(res.data);
         responseToState(res);
+        console.log(urlArray);
         setShowResults(true);
         setShowSpinner(false);
       })
       .catch((error) => {
+        setFetchError(error);
         setShowSpinner(false);
       });
+  };
+
+  const handleError = (error) => {
+    console.log(error);
   };
 
   const backToMain = () => setShowResults(!showResults);
 
   return (
     <View style={styles.container}>
+      {fetchError && (
+        <View style={styles.errorDiv}>
+          <Text style={styles.errorText}>{fetchError}</Text>
+        </View>
+      )}
       {!showResults && !showSpinner && (
         <View>
           <ScrollView>
             <TouchableOpacity
               onPress={FetchResults}
-              style={{ alignItems: "center", paddingTop: STATUS_BAR_HEIGHT }}
+              style={{ alignItems: "center" }}
             >
               <SponsorImage
                 source={urlArray[0]}
@@ -135,7 +149,7 @@ export default function App() {
                   fontWeight: "bold",
                 }}
               >
-                Live Results proudly brought to you by:{" "}
+                Live Results proudly brought to you by:
               </Text>
             </View>
             <HomeScreenSponsors urlArray={urlArray} linkArray={linkArray} />
@@ -144,7 +158,7 @@ export default function App() {
             <Text>Powered by: </Text>
             <Text style={{ fontWeight: "bold" }}>SPIKE NETWORKS LTD</Text>
           </View>
-          <BannerAd />
+          <BannerAd onError={handleError} />
         </View>
       )}
 
@@ -166,9 +180,6 @@ export default function App() {
           <View style={styles.developerView}>
             <Text>Powered by: </Text>
             <Text style={{ fontWeight: "bold" }}>SPIKE NETWORKS LTD</Text>
-          </View>
-          <View style={{ marginTop: 10 }}>
-            <BannerAd />
           </View>
         </View>
       )}
@@ -201,7 +212,7 @@ export default function App() {
             diffPreviousArray={diffPreviousArray}
           />
           <ResultsScreenSponsors urlArray={urlArray} linkArray={linkArray} />
-          <BannerAd />
+          <BannerAd onError={handleError} />
         </View>
       )}
     </View>
@@ -214,12 +225,12 @@ const styles = StyleSheet.create({
     backgroundColor: HEADER_COLOR,
     alignItems: "center",
     justifyContent: "center",
+    paddingTop: STATUS_BAR_HEIGHT,
   },
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
     height: 40,
-    marginTop: STATUS_BAR_HEIGHT,
   },
   developerView: {
     alignItems: "center",
@@ -229,5 +240,17 @@ const styles = StyleSheet.create({
     backgroundColor: BUTTON_1_COLOR,
     borderRadius: 5,
     marginTop: 5,
+  },
+  errorText: {
+    fontStyle: "italic",
+    color: "blue",
+  },
+  errorDiv: {
+    backgroundColor: "#fff",
+    width: SCREEN_WIDTH,
+    marginTop: 30,
+    height: SCREEN_HEIGHT * 0.05,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
