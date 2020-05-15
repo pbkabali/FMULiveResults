@@ -24,7 +24,5 @@ export const RIGH_PANE_BACKGROUND_COLOR_2 = "#F7F6E7";
 
 export const RIGH_PANE_BACKGROUND_COLOR_1 = "#E7E6E1";
 
-// export const GOOGLE_BANNER_ID = "ca-app-pub-3940256099942544/6300978111"; //example
+export const GOOGLE_BANNER_ID = "ca-app-pub-3940256099942544/6300978111"; //example
 // export const GOOGLE_APP_ID = "ca-app-pub-3940256099942544~3347511713"; //sample
-export const GOOGLE_BANNER_ID = "ca-app-pub-4655659437119690/9586089401";
-export const GOOGLE_APP_ID = "ca-app-pub-4655659437119690~2381359132";

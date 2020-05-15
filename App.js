@@ -91,9 +91,7 @@ export default function App() {
     axios
       .get(INITIAL_URL, { headers: { "Content-Type": "application/json" } })
       .then((res) => {
-        console.log(res.data);
         responseToState(res);
-        console.log(urlArray);
         setShowResults(true);
         setShowSpinner(false);
       })
