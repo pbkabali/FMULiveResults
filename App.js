@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   ScrollView,
+  Modal,
 } from "react-native";
 
 import ResultsTable from "./components/resultsTable";
@@ -31,6 +32,8 @@ import dataBreakDown from "./helpers";
 
 export default function App() {
   const [showResults, setShowResults] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
   const [positionArray, setPositionArray] = useState(null);
   const [leftPane, setLeftPane] = useState(null);
   const [totalTimeArray, setTotalTimeArray] = useState(null);
@@ -39,7 +42,6 @@ export default function App() {
   const [diffPreviousArray, setDiffPreviousArray] = useState(null);
   const [tableData, setTableData] = useState(null);
   const [hieghtArray, setHieghtArray] = useState(null);
-  const [showSpinner, setShowSpinner] = useState(false);
   const [urlArray, setUrlArray] = useState([]);
   const [linkArray, setLinkArray] = useState([]);
   const [rallyName, setRallyName] = useState(null);
@@ -70,21 +72,21 @@ export default function App() {
     setDiffPreviousArray(diffPrevoius);
     setRallyName(name);
   };
-
   useEffect(() => {
-    setShowSpinner(true);
     axios
       .get(INITIAL_URL, { headers: { "Content-Type": "application/json" } })
       .then((res) => {
         responseToState(res);
         setShowSpinner(false);
       })
-      .catch((error) => {
+      .catch((err) => {
+        setFetchError(true);
         setShowSpinner(false);
       });
   }, []);
 
   const FetchResults = () => {
+    setFetchError(false);
     setShowSpinner(true);
     axios
       .get(INITIAL_URL, { headers: { "Content-Type": "application/json" } })
@@ -93,58 +95,108 @@ export default function App() {
         setShowResults(true);
         setShowSpinner(false);
       })
-      .catch((error) => {
+      .catch((err) => {
+        setFetchError(true);
         setShowSpinner(false);
       });
   };
 
+  const handleError = (error) => {
+    console.log(error);
+  };
+
   const backToMain = () => setShowResults(!showResults);
+
+  const retryFetch = () => {
+    setFetchError(false);
+    setShowSpinner(true);
+    axios
+      .get(INITIAL_URL, { headers: { "Content-Type": "application/json" } })
+      .then((res) => {
+        responseToState(res);
+        setShowSpinner(false);
+      })
+      .catch((err) => {
+        setFetchError(true);
+        setShowSpinner(false);
+      });
+  };
+
+  const dismissModal = () => setFetchError(false);
 
   return (
     <View style={styles.container}>
+      <Modal animationType="slide" transparent={true} visible={fetchError}>
+        <View style={styles.modalView}>
+          <View style={styles.errorDiv}>
+            <View style={{ alignItems: "center" }}>
+              <Text style={styles.errorHeader}>Error!</Text>
+              <Text style={styles.errorText}>
+                Try checking your internet connection
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginTop: 30,
+              }}
+            >
+              <Text style={styles.modalDismiss} onPress={dismissModal}>
+                DISMISS
+              </Text>
+              <Text
+                style={[styles.modalDismiss, styles.modalTryAgain]}
+                onPress={retryFetch}
+              >
+                TRY AGAIN
+              </Text>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       {!showResults && !showSpinner && (
         <View>
-          <ScrollView>
-            <TouchableOpacity
-              onPress={FetchResults}
-              style={{ alignItems: "center", paddingTop: STATUS_BAR_HEIGHT }}
-            >
-              <SponsorImage
-                source={urlArray[0]}
-                length={SCREEN_WIDTH * 0.8}
-                high={SCREEN_HEIGHT * 0.2}
-              />
-              <View style={styles.fetchButton}>
-                <Text
-                  style={{
-                    color: TEXT_1_COLOR,
-                    fontSize: 20,
-                    fontWeight: "bold",
-                    margin: 10,
-                  }}
-                >
-                  Check Live Results
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <View style={styles.developerView}>
+          <TouchableOpacity
+            onPress={FetchResults}
+            style={{ alignItems: "center" }}
+          >
+            <SponsorImage
+              source={urlArray[0]}
+              length={SCREEN_WIDTH * 0.8}
+              high={SCREEN_HEIGHT * 0.2}
+            />
+            <View style={styles.fetchButton}>
               <Text
                 style={{
                   color: TEXT_1_COLOR,
-                  marginTop: 15,
+                  fontSize: 20,
                   fontWeight: "bold",
+                  margin: 10,
                 }}
               >
-                Live Results proudly brought to you by:{" "}
+                Check Live Results
               </Text>
             </View>
-            <HomeScreenSponsors urlArray={urlArray} linkArray={linkArray} />
-          </ScrollView>
+          </TouchableOpacity>
+          <View style={styles.developerView}>
+            <Text
+              style={{
+                color: TEXT_1_COLOR,
+                marginTop: 15,
+                fontWeight: "bold",
+              }}
+            >
+              Live Results proudly brought to you by:
+            </Text>
+          </View>
+          <HomeScreenSponsors urlArray={urlArray} linkArray={linkArray} />
           <View style={styles.developerView}>
             <Text>Powered by: </Text>
             <Text style={{ fontWeight: "bold" }}>SPIKE NETWORKS LTD</Text>
           </View>
-          <BannerAd />
+          <BannerAd onError={handleError} />
         </View>
       )}
 
@@ -166,9 +218,6 @@ export default function App() {
           <View style={styles.developerView}>
             <Text>Powered by: </Text>
             <Text style={{ fontWeight: "bold" }}>SPIKE NETWORKS LTD</Text>
-          </View>
-          <View style={{ marginTop: 10 }}>
-            <BannerAd />
           </View>
         </View>
       )}
@@ -201,7 +250,7 @@ export default function App() {
             diffPreviousArray={diffPreviousArray}
           />
           <ResultsScreenSponsors urlArray={urlArray} linkArray={linkArray} />
-          <BannerAd />
+          <BannerAd onError={handleError} />
         </View>
       )}
     </View>
@@ -214,12 +263,12 @@ const styles = StyleSheet.create({
     backgroundColor: HEADER_COLOR,
     alignItems: "center",
     justifyContent: "center",
+    paddingTop: STATUS_BAR_HEIGHT,
   },
   footer: {
     flexDirection: "row",
     justifyContent: "space-between",
     height: 40,
-    marginTop: STATUS_BAR_HEIGHT,
   },
   developerView: {
     alignItems: "center",
@@ -229,5 +278,39 @@ const styles = StyleSheet.create({
     backgroundColor: BUTTON_1_COLOR,
     borderRadius: 5,
     marginTop: 5,
+  },
+  errorHeader: {
+    fontStyle: "italic",
+    color: HEADER_COLOR,
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  errorText: {
+    fontStyle: "italic",
+    color: "blue",
+    fontWeight: "bold",
+  },
+  errorDiv: {
+    backgroundColor: "rgba(235, 240, 241, 0.9)",
+    width: SCREEN_WIDTH * 0.85,
+    marginBottom: 20,
+    height: SCREEN_HEIGHT * 0.2,
+    justifyContent: "center",
+    borderRadius: 10,
+  },
+  modalView: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalDismiss: {
+    color: HEADER_COLOR,
+    fontWeight: "bold",
+    fontSize: 14,
+    marginLeft: 10,
+  },
+  modalTryAgain: {
+    color: BUTTON_1_COLOR,
+    marginRight: 10,
   },
 });
